@@ -137,9 +137,9 @@
                 <div class="mt-6 pt-5 border-t border-slate-700/50">
                     <span class="text-xs font-semibold text-slate-400 block mb-2">Quick Presets:</span>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setPreset(2, 2, 2, 2)" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 hover:text-white transition rounded text-xs font-medium border border-slate-700">Equal (2x4)</button>
-                        <button onclick="setPreset(5, 1, 2, 0)" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 hover:text-white transition rounded text-xs font-medium border border-slate-700">Skewed</button>
-                        <button onclick="setPreset(5, 5, 0, 0)" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 hover:text-white transition rounded text-xs font-medium border border-slate-700">Binary (5-5)</button>
+                        <button onclick="setPreset(2, 2, 2, 2)" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 hover:text-white transition rounded text-xs font-medium border border-slate-700 text-center">Equal (2x4)</button>
+                        <button onclick="setPreset(0, 0, 0, 0)" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 hover:text-white transition rounded text-xs font-medium border border-slate-700 text-rose-400 hover:text-white text-center">Clear All</button>
+                        <button onclick="setPreset(10, 10, 10, 10)" class="px-2 py-1 bg-slate-800 hover:bg-indigo-600 hover:text-white transition rounded text-xs font-medium border border-slate-700 text-center">Fill All (10x4)</button>
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                     The raw probability $P(A)$ of picking a ball is based on the <strong>actual counts</strong> inside the box:
                 </p>
                 <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-center font-serif text-xs text-indigo-300 my-2 leading-relaxed">
-                    $$P(\text{Color}) = \frac{\text{Exact count of targeted color balls}}{\text{Exact total number of balls in box}}$$
+                    $$P(\text{Color}) = \frac{\text{Targeted drawing count chosen by you}}{\text{Exact total number of balls in box}}$$
                 </div>
                 <p class="text-[11px] text-amber-400/90 leading-relaxed italic mt-1 font-semibold">
                     ⚠️ Note: You must enter the exact physical counts first! If the fraction can be simplified, we will display and explain the simplified form in your result.
@@ -196,36 +196,68 @@
             </div>
         </section>
 
-        <!-- Right Column: Question Engine / Challenge Panel (4 cols) -->
+        <!-- Right Column: Custom Creator Panel (4 cols) -->
         <section class="lg:col-span-4 flex flex-col gap-6">
             
-            <!-- Game/Challenge Controller Card -->
-            <div id="challenge-card" class="bg-gradient-to-br from-slate-800/80 to-indigo-950/25 border border-slate-700/60 rounded-2xl p-5 shadow-xl min-h-[380px] flex flex-col justify-between">
+            <div id="challenge-card" class="bg-gradient-to-br from-slate-800/80 to-indigo-950/25 border border-slate-700/60 rounded-2xl p-5 shadow-xl min-h-[420px] flex flex-col justify-between">
                 
-                <!-- State: Empty / Idle -->
-                <div id="state-idle" class="flex-grow flex flex-col items-center justify-center text-center py-8">
-                    <div class="w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center text-3xl mb-4 border border-indigo-500/20">
-                        🎲
+                <!-- State: Config/Customizer UI -->
+                <div id="state-idle" class="flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-lg">🛠️</span>
+                            <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider">Custom Challenge Builder</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">Choose the color and quantity of balls drawn to test your own configuration layout!</p>
+
+                        <!-- Step 1: Select Color -->
+                        <div class="mb-4">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-2">1. Select Target Color:</label>
+                            <div class="grid grid-cols-2 gap-2" id="custom-color-picker">
+                                <button data-color="red" class="py-2 px-3 text-xs font-bold rounded-xl border border-rose-500/30 bg-rose-950/20 text-rose-300 ring-2 ring-rose-500/70 transition shadow flex items-center gap-1.5 justify-center">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Red
+                                </button>
+                                <button data-color="blue" class="py-2 px-3 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800/40 text-slate-400 hover:border-blue-500/40 transition flex items-center gap-1.5 justify-center">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Blue
+                                </button>
+                                <button data-color="green" class="py-2 px-3 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800/40 text-slate-400 hover:border-emerald-500/40 transition flex items-center gap-1.5 justify-center">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Green
+                                </button>
+                                <button data-color="yellow" class="py-2 px-3 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800/40 text-slate-400 hover:border-amber-500/40 transition flex items-center gap-1.5 justify-center">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Yellow
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Select Quantity -->
+                        <div class="mb-2">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1.5">2. Number of Balls Taken Out:</label>
+                            <div class="flex items-center justify-between bg-slate-900/80 rounded-xl p-2.5 border border-slate-800">
+                                <button id="btn-qty-minus" class="w-8 h-8 flex items-center justify-center font-bold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition text-base">-</button>
+                                <div class="text-center">
+                                    <span id="custom-qty-label" class="text-xl font-black text-indigo-400">1</span>
+                                    <span class="block text-[9px] text-slate-500 uppercase font-semibold">To Take Out</span>
+                                </div>
+                                <button id="btn-qty-plus" class="w-8 h-8 flex items-center justify-center font-bold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition text-base">+</button>
+                            </div>
+                            <span id="custom-qty-hint" class="block text-[10px] text-slate-500 mt-1 italic text-right">Max available in box: 2</span>
+                        </div>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-200">Ready to Test Your Skill?</h3>
-                    <p class="text-xs text-slate-400 max-w-[260px] mt-2 mb-6">
-                        Configure the balls inside the box, then draw a challenge card to calculate drawing probabilities.
-                    </p>
-                    <button id="btn-start-challenge" class="w-full max-w-[240px] py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold rounded-xl transition shadow-lg shadow-indigo-600/20 transform active:scale-95 flex items-center justify-center gap-2">
-                        <span>Draw Challenge Card</span> ➔
+
+                    <button id="btn-start-challenge" class="w-full mt-4 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold rounded-xl transition shadow-lg shadow-indigo-600/20 active:scale-95 flex items-center justify-center gap-2">
+                        <span>Launch This Challenge</span> ➔
                     </button>
                 </div>
 
                 <!-- State: Active Challenge -->
                 <div id="state-active" class="hidden flex-grow flex flex-col justify-between">
                     <div>
-                        <!-- Challenge Card Top Header -->
                         <div class="flex items-center justify-between mb-4">
                             <span class="px-2.5 py-1 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-black rounded-lg uppercase tracking-wider animate-pulse">
                                 Live Challenge
                             </span>
                             <button id="btn-skip-challenge" class="text-xs text-slate-400 hover:text-rose-400 transition">
-                                Skip ❌
+                                Edit Setup 🛠️
                             </button>
                         </div>
 
@@ -233,7 +265,7 @@
                         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 mb-5">
                             <p class="text-xs text-indigo-300 font-bold uppercase tracking-wider mb-1">Challenge Objective</p>
                             <h3 class="text-md sm:text-lg font-bold text-slate-100 leading-snug">
-                                What is the probability of taking out <strong class="bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-200">exactly 1</strong> <span id="target-color-text" class="px-2 py-0.5 rounded-md font-extrabold shadow-sm">Color</span> ball from the box?
+                                What is the probability of taking out <strong id="target-count-text" class="text-indigo-400 font-black">exactly 1</strong> <span id="target-color-text" class="px-2 py-0.5 rounded-md font-extrabold shadow-sm">Color</span> ball from the box?
                             </h3>
                         </div>
 
@@ -268,11 +300,10 @@
                     </div>
                 </div>
 
-                <!-- State: Feedback Result (Correct/Incorrect) -->
+                <!-- State: Feedback Result -->
                 <div id="state-feedback" class="hidden flex-grow flex flex-col justify-between">
                     <div class="text-center py-4 flex-grow flex flex-col justify-center items-center">
                         
-                        <!-- Visual Feedback Status Indicator -->
                         <div id="feedback-icon-container" class="w-16 h-16 rounded-full flex items-center justify-center text-4xl mb-3 shadow-lg">
                             🎉
                         </div>
@@ -303,7 +334,7 @@
                                 </div>
                             </div>
 
-                            <!-- Simplified Explanation Box (RESIZED & STYLED HIGHER DESIGN VALUE) -->
+                            <!-- Enlarged, High-Legibility Simplified Output Explanation Statement -->
                             <div id="feedback-simplification-note" class="text-sm sm:text-base text-indigo-200 border-t border-slate-800/80 pt-3 text-center font-semibold leading-relaxed">
                                 This fraction simplifies down to 1/2!
                             </div>
@@ -314,9 +345,8 @@
                         </p>
                     </div>
 
-                    <!-- Next Question/Retry Action button -->
                     <button id="btn-next-step" class="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition shadow">
-                        Continue to Next Challenge
+                        Change Parameters / Test Again
                     </button>
                 </div>
 
@@ -324,7 +354,7 @@
         </section>
     </main>
 
-    <!-- Custom Notification system (replaces alert) -->
+    <!-- Toast Notification container -->
     <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
 
     <!-- Footer Area -->
@@ -334,15 +364,45 @@
             <div class="flex gap-4">
                 <a href="#" onclick="showQuickInstructions(); return false;" class="text-indigo-400 hover:underline">How to Play</a>
                 <span>|</span>
-                <a href="#" onclick="resetScores(); return false;" class="text-rose-400 hover:underline">Reset Score</a>
+                <a href="#" onclick="resetScores(); return false;" class="text-rose-400 hover:underline">Reset Score & Saves</a>
             </div>
         </div>
     </footer>
 
-    <!-- AUDIO & MATH GAME LOGIC -->
+    <!-- INTERACTIVE GAME LOGIC -->
     <script>
+        // --- LOCAL STORAGE DATA SAVING ENGINE ---
+        const SAVE_KEY = "prob_simulator_save_data";
+        let gameState = {
+            streak: 0,
+            totalAnswered: 0,
+            audioEnabled: true,
+            counts: { red: 2, blue: 2, green: 2, yellow: 2 }
+        };
+
+        function loadSavedData() {
+            try {
+                const raw = localStorage.getItem(SAVE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && parsed.counts) {
+                        gameState = parsed;
+                    }
+                }
+            } catch (e) {
+                console.warn("Could not load save data from localStorage", e);
+            }
+        }
+
+        function triggerSave() {
+            try {
+                localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
+            } catch (e) {
+                console.warn("Could not write save data to localStorage", e);
+            }
+        }
+
         // --- NATIVE SOUND SYNTHESIZER ---
-        let audioEnabled = true;
         let audioContext;
 
         function initAudio() {
@@ -351,25 +411,20 @@
             }
         }
 
-        // Play procedural synthesizer sound effect
         function playSound(type) {
-            if (!audioEnabled) return;
+            if (!gameState.audioEnabled) return;
             try {
                 initAudio();
                 const ctx = audioContext;
-                if (ctx.state === 'suspended') {
-                    ctx.resume();
-                }
+                if (ctx.state === 'suspended') ctx.resume();
 
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-
                 const now = ctx.currentTime;
 
                 if (type === 'collision') {
-                    // Soft organic sound for balls pop/re-arrange
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(200 + Math.random() * 80, now);
                     osc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
@@ -378,25 +433,20 @@
                     osc.start(now);
                     osc.stop(now + 0.08);
                 } else if (type === 'success') {
-                    // Arpeggio chord of success (major scale)
-                    const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+                    const notes = [261.63, 329.63, 392.00, 523.25];
                     notes.forEach((freq, idx) => {
                         const noteOsc = ctx.createOscillator();
                         const noteGain = ctx.createGain();
                         noteOsc.connect(noteGain);
                         noteGain.connect(ctx.destination);
-                        
                         noteOsc.type = 'triangle';
                         noteOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
-                        
                         noteGain.gain.setValueAtTime(0.12, now + idx * 0.08);
                         noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
-                        
                         noteOsc.start(now + idx * 0.08);
                         noteOsc.stop(now + idx * 0.08 + 0.25);
                     });
                 } else if (type === 'fail') {
-                    // Descending buzz error chord
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(180, now);
                     osc.frequency.linearRampToValueAtTime(110, now + 0.25);
@@ -405,7 +455,6 @@
                     osc.start(now);
                     osc.stop(now + 0.28);
                 } else if (type === 'card') {
-                    // Card swipe/drawing sound
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(400, now);
                     osc.frequency.exponentialRampToValueAtTime(900, now + 0.15);
@@ -415,58 +464,27 @@
                     osc.stop(now + 0.15);
                 }
             } catch (e) {
-                console.warn("Audio Context could not play sound automatically.", e);
+                console.warn("Audio Context error", e);
             }
         }
-
-        // Toggle Audio
-        document.getElementById('btn-audio').addEventListener('click', () => {
-            audioEnabled = !audioEnabled;
-            const btn = document.getElementById('btn-audio');
-            const icon = document.getElementById('audio-icon');
-            if (audioEnabled) {
-                icon.textContent = "🔊";
-                btn.innerHTML = `<span>🔊</span><span class="hidden sm:inline">Sound: On</span>`;
-                initAudio();
-            } else {
-                icon.textContent = "🔇";
-                btn.innerHTML = `<span>🔇</span><span class="hidden sm:inline">Sound: Off</span>`;
-            }
-        });
-
 
         // --- BOX CHAMBER SIMULATION (STATIC SCATTER LAYOUT) ---
         const canvas = document.getElementById('physics-canvas');
         const ctx = canvas.getContext('2d');
 
-        // Ball Config Counts (Default starts at 2 each, max capped at 10)
-        const counts = {
-            red: 2,
-            blue: 2,
-            green: 2,
-            yellow: 2
-        };
-
         const colorMap = {
-            red: { hex: '#f43f5e', shadow: 'rgba(244, 63, 94, 0.4)', text: 'Rose Red', bg: 'bg-rose-500/20 text-rose-300 border-rose-500/40' },
-            blue: { hex: '#3b82f6', shadow: 'rgba(59, 130, 246, 0.4)', text: 'Ocean Blue', bg: 'bg-blue-500/20 text-blue-300 border-blue-500/40' },
-            green: { hex: '#10b981', shadow: 'rgba(16, 185, 129, 0.4)', text: 'Emerald Green', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' },
-            yellow: { hex: '#f59e0b', shadow: 'rgba(245, 158, 11, 0.4)', text: 'Golden Yellow', bg: 'bg-amber-500/20 text-amber-300 border-amber-500/40' }
+            red: { hex: '#f43f5e', shadow: 'rgba(244, 63, 94, 0.4)', text: 'Rose Red', bg: 'bg-rose-500/20 text-rose-300 border-rose-500/40', ring: 'ring-rose-500/70 bg-rose-950/20 text-rose-300' },
+            blue: { hex: '#3b82f6', shadow: 'rgba(59, 130, 246, 0.4)', text: 'Ocean Blue', bg: 'bg-blue-500/20 text-blue-300 border-blue-500/40', ring: 'ring-blue-500/70 bg-blue-950/20 text-blue-300' },
+            green: { hex: '#10b981', shadow: 'rgba(16, 185, 129, 0.4)', text: 'Emerald Green', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40', ring: 'ring-emerald-500/70 bg-emerald-950/20 text-emerald-300' },
+            yellow: { hex: '#f59e0b', shadow: 'rgba(245, 158, 11, 0.4)', text: 'Golden Yellow', bg: 'bg-amber-500/20 text-amber-300 border-amber-500/40', ring: 'ring-amber-500/70 bg-amber-950/20 text-amber-300' }
         };
 
         let balls = [];
-
-        // Box Bounding Dimensions (Resized dynamically based on total balls inside)
-        let boxBounds = {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0
-        };
+        let boxBounds = { x: 0, y: 0, width: 0, height: 0 };
 
         // Recalculates physical box bounds inside canvas space depending on ball population count
         function updateBoxBounds() {
-            const totalBalls = counts.red + counts.blue + counts.green + counts.yellow;
+            const totalBalls = gameState.counts.red + gameState.counts.blue + gameState.counts.green + gameState.counts.yellow;
             
             // Dynamic scale factor based on ball counts (Minimum 35% scale, Maximum 90% scale)
             const minScale = 0.35;
@@ -487,16 +505,13 @@
                 this.color = colorMap[colorKey].hex;
                 this.glow = colorMap[colorKey].shadow;
                 this.radius = 15;
-                this.x = 0;
-                this.y = 0;
+                this.x = 0; this.y = 0;
             }
 
             // Scatter ball randomly without overlapping others and strictly inside the current dynamically-sized box boundary
             setRandomPosition(existingBalls) {
-                let attempts = 0;
-                let found = false;
+                let attempts = 0, found = false;
                 const margin = this.radius + 10;
-
                 while (attempts < 300 && !found) {
                     const rx = boxBounds.x + margin + Math.random() * (boxBounds.width - margin * 2);
                     const ry = boxBounds.y + margin + Math.random() * (boxBounds.height - margin * 2);
@@ -504,7 +519,6 @@
                     let overlap = false;
                     for (let other of existingBalls) {
                         const dist = Math.hypot(rx - other.x, ry - other.y);
-                        // Ensure balls don't touch
                         if (dist < (this.radius + other.radius + 10)) {
                             overlap = true;
                             break;
@@ -530,8 +544,7 @@
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = this.glow;
+                ctx.shadowBlur = 8; ctx.shadowColor = this.glow;
                 ctx.fill();
                 ctx.shadowBlur = 0; // reset
                 ctx.closePath();
@@ -550,7 +563,7 @@
             const container = canvas.parentNode;
             canvas.width = container.clientWidth;
             canvas.height = container.clientWidth; 
-            syncBallsFromConfig(); // Re-center and layout on resize
+            syncBallsFromConfig();
         }
 
         // Rebuild and reposition static ball collection cleanly inside resized box
@@ -558,8 +571,8 @@
             updateBoxBounds();
             const newBallArray = [];
             
-            Object.keys(counts).forEach(colorKey => {
-                const targetCount = counts[colorKey];
+            Object.keys(gameState.counts).forEach(colorKey => {
+                const targetCount = gameState.counts[colorKey];
                 for (let i = 0; i < targetCount; i++) {
                     const ball = new Ball(colorKey);
                     ball.setRandomPosition(newBallArray);
@@ -570,19 +583,17 @@
             balls = newBallArray;
             updateGlobalCountBadge();
             renderBox();
+            updateBuilderLimits();
         }
 
         function updateGlobalCountBadge() {
-            const total = counts.red + counts.blue + counts.green + counts.yellow;
+            const total = gameState.counts.red + gameState.counts.blue + gameState.counts.green + gameState.counts.yellow;
             document.getElementById('ball-total-badge').textContent = `Total: ${total} Balls`;
             document.getElementById('total-count-label').textContent = total;
             
             const warningEl = document.getElementById('empty-warning');
-            if (total === 0) {
-                warningEl.classList.remove('hidden');
-            } else {
-                warningEl.classList.add('hidden');
-            }
+            if (total === 0) warningEl.classList.remove('hidden');
+            else warningEl.classList.add('hidden');
         }
 
         // Re-shuffle placement coordinates inside bounds
@@ -596,7 +607,6 @@
             });
             balls = rearranged;
             renderBox();
-            showToast("🌀 Layout shuffled inside the resized chamber!", "info");
         }
 
         // Render entire static container chamber with dynamic boundary box
@@ -607,21 +617,13 @@
             ctx.strokeStyle = 'rgba(79, 70, 229, 0.08)';
             ctx.lineWidth = 1;
             for(let i = 0; i < canvas.width; i += 30) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, canvas.height);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(canvas.width, i);
-                ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
             }
 
             // Draw the Dynamic Chamber border box centered in canvas
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(99, 102, 241, 0.3)';
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.6)';
-            ctx.lineWidth = 3;
+            ctx.shadowBlur = 15; ctx.shadowColor = 'rgba(99, 102, 241, 0.3)';
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.6)'; ctx.lineWidth = 3;
             
             // Draw rounded rectangle container
             const radius = 16;
@@ -636,10 +638,8 @@
             ctx.lineTo(boxBounds.x, boxBounds.y + radius);
             ctx.quadraticCurveTo(boxBounds.x, boxBounds.y, boxBounds.x + radius, boxBounds.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
-            ctx.fill();
-            ctx.stroke();
-
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.6)'; ctx.fill(); ctx.stroke();
+            
             // Clear shadow settings for drawing balls
             ctx.shadowBlur = 0;
 
@@ -649,60 +649,139 @@
 
         // Hook up user inputs to live config data (Cap at 10)
         function setupConfigurationHooks() {
-            const colors = ['red', 'blue', 'green', 'yellow'];
-            colors.forEach(col => {
+            ['red', 'blue', 'green', 'yellow'].forEach(col => {
                 const slider = document.getElementById(`slide-${col}`);
                 const num = document.getElementById(`num-${col}`);
 
                 // Sync slider to number
                 slider.addEventListener('input', (e) => {
                     let val = parseInt(e.target.value) || 0;
-                    if (val < 0) val = 0;
-                    if (val > 10) val = 10;
                     num.value = val;
-                    counts[col] = val;
-                    syncBallsFromConfig();
+                    gameState.counts[col] = val;
+                    syncBallsFromConfig(); triggerSave();
                 });
 
                 // Sync number to slider
                 num.addEventListener('input', (e) => {
                     let val = parseInt(e.target.value) || 0;
-                    if (val < 0) val = 0;
-                    if (val > 10) val = 10;
+                    if (val < 0) val = 0; if (val > 10) val = 10;
                     slider.value = val;
-                    counts[col] = val;
-                    syncBallsFromConfig();
+                    gameState.counts[col] = val;
+                    syncBallsFromConfig(); triggerSave();
                 });
             });
         }
 
         // Fast Preset Handler
         function setPreset(r, b, g, y) {
-            counts.red = r;
-            counts.blue = b;
-            counts.green = g;
-            counts.yellow = y;
-
-            const colors = ['red', 'blue', 'green', 'yellow'];
-            const vals = [r, b, g, y];
+            gameState.counts = { red: r, blue: b, green: g, yellow: y };
             
-            colors.forEach((col, idx) => {
-                document.getElementById(`slide-${col}`).value = vals[idx];
-                document.getElementById(`num-${col}`).value = vals[idx];
+            ['red', 'blue', 'green', 'yellow'].forEach((col, idx) => {
+                const val = [r, b, g, y][idx];
+                document.getElementById(`slide-${col}`).value = val;
+                document.getElementById(`num-${col}`).value = val;
             });
 
-            syncBallsFromConfig();
+            syncBallsFromConfig(); triggerSave();
             playSound('card');
-            showToast(`⚙️ Preset configuration loaded successfully!`, "info");
+            
+            if (r === 0 && b === 0 && g === 0 && y === 0) {
+                showToast(`♻️ All balls cleared from the box!`, "info");
+            } else {
+                showToast(`⚙️ Preset configuration loaded!`, "info");
+            }
         }
 
 
-        // --- PROBABILITY GAME ENGINE ---
-        let currentChallenge = null;
-        let streak = 0;
-        let totalAnswered = 0;
+        // --- CUSTOM QUESTION PICKER BUILDER ---
+        let selectedCustomColor = "red";
+        let selectedCustomQty = 1;
+        let activeChallenge = null;
 
-        // Euclidean Algorithm for GCD
+        function initCustomBuilderHooks() {
+            const container = document.getElementById('custom-color-picker');
+            const buttons = container.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => {
+                        b.className = "py-2 px-3 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800/40 text-slate-400 hover:border-indigo-500/40 transition flex items-center gap-1.5 justify-center";
+                    });
+                    selectedCustomColor = btn.getAttribute('data-color');
+                    btn.className = `py-2 px-3 text-xs font-bold rounded-xl border ${colorMap[selectedCustomColor].ring} transition shadow flex items-center gap-1.5 justify-center`;
+                    playSound('collision');
+                    updateBuilderLimits();
+                });
+            });
+
+            document.getElementById('btn-qty-minus').addEventListener('click', () => {
+                if (selectedCustomQty > 0) {
+                    selectedCustomQty--;
+                    document.getElementById('custom-qty-label').textContent = selectedCustomQty;
+                    playSound('collision');
+                }
+            });
+
+            document.getElementById('btn-qty-plus').addEventListener('click', () => {
+                const maxAvailable = gameState.counts[selectedCustomColor];
+                if (selectedCustomQty < maxAvailable) {
+                    selectedCustomQty++;
+                    document.getElementById('custom-qty-label').textContent = selectedCustomQty;
+                    playSound('collision');
+                } else {
+                    showToast(`Cannot exceed the ${maxAvailable} ${selectedCustomColor} balls inside the box!`, "error");
+                }
+            });
+        }
+
+        function updateBuilderLimits() {
+            const maxAvailable = gameState.counts[selectedCustomColor];
+            document.getElementById('custom-qty-hint').textContent = `Max available in box: ${maxAvailable}`;
+            if (selectedCustomQty > maxAvailable) {
+                selectedCustomQty = maxAvailable;
+            }
+            // Ensure bottom floor is 0 if empty box, or stays at least at 0
+            if (maxAvailable === 0) selectedCustomQty = 0;
+            else if (selectedCustomQty === 0 && maxAvailable > 0) selectedCustomQty = 1;
+
+            document.getElementById('custom-qty-label').textContent = selectedCustomQty;
+        }
+
+        function launchCustomChallenge() {
+            const totalBalls = gameState.counts.red + gameState.counts.blue + gameState.counts.green + gameState.counts.yellow;
+            if (totalBalls === 0) {
+                showToast("Please add at least one ball to the container first!", "error");
+                playSound('fail');
+                return;
+            }
+
+            playSound('card');
+
+            activeChallenge = {
+                targetColor: selectedCustomColor,
+                targetCount: selectedCustomQty, // The custom quantity selected by the player
+                totalCount: totalBalls
+            };
+
+            // Transition UI State
+            document.getElementById('state-idle').classList.add('hidden');
+            document.getElementById('state-feedback').classList.add('hidden');
+            document.getElementById('state-active').classList.remove('hidden');
+
+            // Format objective values
+            document.getElementById('target-count-text').textContent = `exactly ${selectedCustomQty}`;
+            const colorTxt = document.getElementById('target-color-text');
+            colorTxt.textContent = colorMap[selectedCustomColor].text;
+            colorTxt.className = `px-2 py-0.5 rounded-md font-extrabold shadow-sm ${colorMap[selectedCustomColor].bg}`;
+
+            // Reset user input boxes
+            document.getElementById('input-numerator').value = "";
+            document.getElementById('input-denominator').value = "";
+            document.getElementById('input-numerator').focus();
+        }
+
+
+        // --- MATH GAME EVALUATION ENGINE ---
         function getGreatestCommonDivisor(a, b) {
             return b ? getGreatestCommonDivisor(b, a % b) : a;
         }
@@ -725,68 +804,21 @@
             }
 
             container.appendChild(toast);
-            // Trigger animation
             setTimeout(() => {
                 toast.classList.remove('translate-y-2', 'opacity-0');
             }, 10);
 
-            // Self-destruct sequence
             setTimeout(() => {
                 toast.classList.add('translate-y-1', 'opacity-0');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
-        // Draw a new visual target challenge card
-        function drawChallengeCard() {
-            const totalBalls = counts.red + counts.blue + counts.green + counts.yellow;
-            if (totalBalls === 0) {
-                showToast("Please add at least one ball to the container first!", "error");
-                playSound('fail');
-                return;
-            }
-
-            playSound('card');
-
-            const availableColors = ['red', 'blue', 'green', 'yellow'];
-            const chosenColor = availableColors[Math.floor(Math.random() * availableColors.length)];
-
-            // Setup Challenge Record
-            currentChallenge = {
-                targetColor: chosenColor,
-                targetCount: counts[chosenColor],
-                totalCount: totalBalls
-            };
-
-            // Transition UI State
-            document.getElementById('state-idle').classList.add('hidden');
-            document.getElementById('state-feedback').classList.add('hidden');
-            
-            const activeState = document.getElementById('state-active');
-            activeState.classList.remove('hidden');
-
-            // Format dynamic text values
-            const targetColorEl = document.getElementById('target-color-text');
-            targetColorEl.textContent = colorMap[chosenColor].text;
-            
-            // Reset colors class
-            targetColorEl.className = `px-2 py-0.5 rounded-md font-extrabold shadow-sm ${colorMap[chosenColor].bg}`;
-
-            // Reset inputs
-            document.getElementById('input-numerator').value = "";
-            document.getElementById('input-denominator').value = "";
-            document.getElementById('input-numerator').focus();
-        }
-
-        // Handle mathematical verification of user input fraction
         function submitAnswer() {
-            if (!currentChallenge) return;
+            if (!activeChallenge) return;
 
-            const userNumRaw = document.getElementById('input-numerator').value;
-            const userDenRaw = document.getElementById('input-denominator').value;
-
-            const userNum = parseInt(userNumRaw);
-            const userDen = parseInt(userDenRaw);
+            const userNum = parseInt(document.getElementById('input-numerator').value);
+            const userDen = parseInt(document.getElementById('input-denominator').value);
 
             if (isNaN(userNum) || isNaN(userDen) || userDen === 0) {
                 showToast("Please enter valid numerator and denominator values!", "error");
@@ -794,26 +826,17 @@
                 return;
             }
 
-            if (userNum < 0 || userDen < 0) {
-                showToast("Fractions cannot have negative numbers!", "error");
-                playSound('fail');
-                return;
-            }
+            gameState.totalAnswered++;
+            document.getElementById('score-total').textContent = gameState.totalAnswered;
 
-            totalAnswered++;
-            document.getElementById('score-total').textContent = totalAnswered;
-
-            // Math Calculation variables
-            const actualNum = currentChallenge.targetCount;
-            const actualDen = currentChallenge.totalCount;
+            const actualNum = activeChallenge.targetCount;
+            const actualDen = activeChallenge.totalCount;
             
-            // STRICT VALIDATION: Numerator and denominator must match exact physical counts in the box
+            // STRICT RULE: Entered numbers must match unsimplified counts in the box
             const isCorrect = (userNum === actualNum && userDen === actualDen);
-            
-            // Check if user answer is mathematically equivalent but physically unmatched (e.g. 1/4 instead of 2/8)
             const isEquivalent = (userNum * actualDen === userDen * actualNum);
 
-            // Compute the ideal simplified fraction details
+            // Calculate GCD and simplified variants
             const gcdVal = getGreatestCommonDivisor(actualNum, actualDen);
             const simplifiedNum = actualNum / gcdVal;
             const simplifiedDen = actualDen / gcdVal;
@@ -822,17 +845,17 @@
             // Format whole numbers instead of fractions like 1/1 or 0/1
             let simplifiedStr = "";
             if (simplifiedDen === 1) {
-                simplifiedStr = `${simplifiedNum}`; // e.g. "1" instead of "1/1", "0" instead of "0/1"
+                simplifiedStr = `${simplifiedNum}`; // "1" instead of "1/1", "0" instead of "0/1"
             } else {
                 simplifiedStr = `${simplifiedNum}/${simplifiedDen}`;
             }
 
-            // UI feedback transition
+            // Transition interface state
             document.getElementById('state-active').classList.add('hidden');
             const feedbackState = document.getElementById('state-feedback');
             feedbackState.classList.remove('hidden');
 
-            // Inject metrics in the feedback pane
+            // Inject values
             document.getElementById('feedback-your-num').textContent = userNum;
             document.getElementById('feedback-your-den').textContent = userDen;
             document.getElementById('feedback-act-num').textContent = actualNum;
@@ -844,7 +867,7 @@
             const simpNoteEl = document.getElementById('feedback-simplification-note');
 
             if (isCorrect) {
-                streak++;
+                gameState.streak++;
                 playSound('success');
                 headlineEl.textContent = "Awesome Job! Correct!";
                 headlineEl.className = "text-lg font-black tracking-tight text-emerald-400";
@@ -852,24 +875,22 @@
                 iconContainer.textContent = "🎉";
                 iconContainer.className = "w-16 h-16 rounded-full flex items-center justify-center text-4xl mb-3 shadow-lg bg-emerald-950 border border-emerald-500/40 text-emerald-400 animate-bounce";
 
-                // Explanation message
-                detailTextEl.innerHTML = `Correct! There are exactly <strong>${actualNum} ${colorMap[currentChallenge.targetColor].text}</strong> balls out of a total of <strong>${actualDen}</strong>.`;
+                detailTextEl.innerHTML = `Correct! You requested exactly <strong>${actualNum} ${colorMap[activeChallenge.targetColor].text}</strong> out of a total population of <strong>${actualDen}</strong>.`;
                 
-                // Show how it simplifies
                 if (isSimplifiable) {
                     simpNoteEl.innerHTML = `💡 Great job! This fraction simplifies down to: <strong>${simplifiedStr}</strong> (dividing both by ${gcdVal}).`;
                 } else {
                     if (simplifiedStr === "1") {
                         simpNoteEl.innerHTML = `✨ This simplifies down to a whole number! The final answer is <strong>1</strong> (100% certainty).`;
                     } else if (simplifiedStr === "0") {
-                        simpNoteEl.innerHTML = `✨ There are no balls of this color! The final answer is <strong>0</strong> (0% probability).`;
+                        simpNoteEl.innerHTML = `✨ There are no matching balls! The final answer is <strong>0</strong> (0% probability).`;
                     } else {
                         simpNoteEl.innerHTML = `✨ This fraction is already in its simplest irreducible form!`;
                     }
                 }
 
             } else {
-                streak = 0; // Break streak
+                gameState.streak = 0; // Break streak
                 playSound('fail');
                 headlineEl.textContent = "Oops! That's Not Correct.";
                 headlineEl.className = "text-lg font-black tracking-tight text-rose-400";
@@ -878,74 +899,80 @@
                 iconContainer.className = "w-16 h-16 rounded-full flex items-center justify-center text-4xl mb-3 shadow-lg bg-rose-950 border border-rose-500/40 text-rose-400";
 
                 if (isEquivalent) {
-                    // Specific explanation for matched values but unmatched counts
                     detailTextEl.innerHTML = `Almost! Your math is equivalent, but <strong>you must enter the exact physical counts</strong> first!`;
                     
                     if (isSimplifiable) {
-                        simpNoteEl.innerHTML = `⚠️ The box has <strong>${actualNum}</strong> target balls out of <strong>${actualDen}</strong>. You must enter <strong>${actualNum}/${actualDen}</strong> first. (It simplifies to <strong>${simplifiedStr}</strong>).`;
+                        simpNoteEl.innerHTML = `⚠️ The chosen setup expects exactly <strong>${actualNum}</strong> drawn balls out of <strong>${actualDen}</strong> total. You must enter <strong>${actualNum}/${actualDen}</strong> first. (It simplifies to <strong>${simplifiedStr}</strong>).`;
                     } else {
-                        simpNoteEl.innerHTML = `⚠️ The box has <strong>${actualNum}</strong> target balls out of <strong>${actualDen}</strong>. You must enter <strong>${actualNum}/${actualDen}</strong> first.`;
+                        simpNoteEl.innerHTML = `⚠️ The chosen setup expects exactly <strong>${actualNum}</strong> drawn balls out of <strong>${actualDen}</strong> total. You must enter <strong>${actualNum}/${actualDen}</strong> first.`;
                     }
                 } else {
-                    // Completely incorrect fraction
-                    detailTextEl.innerHTML = `The box currently contains exactly <strong>${actualNum} ${colorMap[currentChallenge.targetColor].text}</strong> balls with <strong>${actualDen} total</strong>.`;
+                    detailTextEl.innerHTML = `Incorrect. You requested exactly <strong>${actualNum} ${colorMap[activeChallenge.targetColor].text}</strong> balls with <strong>${actualDen} total</strong> inside the box.`;
                     
                     if (isSimplifiable) {
-                        simpNoteEl.innerHTML = `📉 The correct probability is <strong>${actualNum}/${actualDen}</strong>, which simplifies down to <strong>${simplifiedStr}</strong>.`;
+                        simpNoteEl.innerHTML = `📉 The correct unsimplified fraction is <strong>${actualNum}/${actualDen}</strong>, which simplifies to <strong>${simplifiedStr}</strong>.`;
                     } else {
                         if (simplifiedStr === "1") {
-                            simpNoteEl.innerHTML = `📉 The correct probability is <strong>${actualNum}/${actualDen}</strong>, which simplifies to <strong>1</strong>.`;
+                            simpNoteEl.innerHTML = `📉 The correct unsimplified fraction is <strong>${actualNum}/${actualDen}</strong>, which simplifies to <strong>1</strong>.`;
                         } else if (simplifiedStr === "0") {
-                            simpNoteEl.innerHTML = `📉 The correct probability is <strong>${actualNum}/${actualDen}</strong>, which simplifies to <strong>0</strong>.`;
+                            simpNoteEl.innerHTML = `📉 The correct unsimplified fraction is <strong>${actualNum}/${actualDen}</strong>, which simplifies to <strong>0</strong>.`;
                         } else {
-                            simpNoteEl.innerHTML = `📉 The correct probability is <strong>${actualNum}/${actualDen}</strong>.`;
+                            simpNoteEl.innerHTML = `📉 The correct unsimplified fraction is <strong>${actualNum}/${actualDen}</strong>.`;
                         }
                     }
                 }
             }
 
-            // Update streak metrics
-            document.getElementById('score-streak').textContent = streak;
+            document.getElementById('score-streak').textContent = gameState.streak;
+            triggerSave();
         }
 
-        // Show instructional notification
         function showQuickInstructions() {
-            showToast("🎯 Set your ball count (0-10), click 'Draw Challenge', input the probability as a fraction of exact counts, and check your work!", "info");
+            showToast("🎯 Customize counts on sliders, choose targeted quantity in the custom options panel, input match ratio fraction, and verify!", "info");
         }
 
-        // Reset Score counters
         function resetScores() {
-            streak = 0;
-            totalAnswered = 0;
-            document.getElementById('score-streak').textContent = streak;
-            document.getElementById('score-total').textContent = totalAnswered;
-            showToast("♻️ Scores and streaks reset!", "info");
+            localStorage.removeItem(SAVE_KEY);
+            gameState.streak = 0;
+            gameState.totalAnswered = 0;
+            gameState.counts = { red: 2, blue: 2, green: 2, yellow: 2 };
+            
+            ['red', 'blue', 'green', 'yellow'].forEach(col => {
+                document.getElementById(`slide-${col}`).value = 2;
+                document.getElementById(`num-${col}`).value = 2;
+            });
+            
+            document.getElementById('score-streak').textContent = 0;
+            document.getElementById('score-total').textContent = 0;
+            syncBallsFromConfig();
+            showToast("♻️ Scores, streaks, and save metrics completely wiped clear!", "info");
         }
 
-        // Transition back to new gameplay cycle
-        function nextChallenge() {
+        function returnToEditor() {
             document.getElementById('state-feedback').classList.add('hidden');
-            drawChallengeCard();
-        }
-
-        // Skip Active challenge
-        function skipChallenge() {
             document.getElementById('state-active').classList.add('hidden');
             document.getElementById('state-idle').classList.remove('hidden');
-            currentChallenge = null;
-            showToast("Challenge skipped.", "info");
+            activeChallenge = null;
+            updateBuilderLimits();
         }
-
 
         // --- EVENT BINDING & INIT ENGINE ---
         window.onload = function() {
+            loadSavedData();
+            
+            // Sync saved values
+            document.getElementById('score-streak').textContent = gameState.streak;
+            document.getElementById('score-total').textContent = gameState.totalAnswered;
+            ['red', 'blue', 'green', 'yellow'].forEach(col => {
+                document.getElementById(`slide-${col}`).value = gameState.counts[col];
+                document.getElementById(`num-${col}`).value = gameState.counts[col];
+            });
+
             resizeCanvas();
             setupConfigurationHooks();
+            initCustomBuilderHooks();
 
-            // Handle layout resize triggers correctly
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-            });
+            window.addEventListener('resize', resizeCanvas);
 
             // Tap box anywhere to Shuffle Layout
             const clickContainer = document.getElementById('canvas-container');
@@ -956,12 +983,12 @@
                 e.stopPropagation(); // Stop parent canvas click from firing twice
                 shuffleBox();
             });
-            document.getElementById('btn-start-challenge').addEventListener('click', drawChallengeCard);
+            document.getElementById('btn-start-challenge').addEventListener('click', launchCustomChallenge);
             document.getElementById('btn-submit-answer').addEventListener('click', submitAnswer);
-            document.getElementById('btn-next-step').addEventListener('click', nextChallenge);
-            document.getElementById('btn-skip-challenge').addEventListener('click', skipChallenge);
+            document.getElementById('btn-next-step').addEventListener('click', returnToEditor);
+            document.getElementById('btn-skip-challenge').addEventListener('click', returnToEditor);
 
-            // Listen for Enter key presses in input boxes to easily check answers
+            // Key triggers
             const enterListener = (e) => {
                 if (e.key === "Enter") {
                     submitAnswer();
@@ -969,6 +996,16 @@
             };
             document.getElementById('input-numerator').addEventListener('keydown', enterListener);
             document.getElementById('input-denominator').addEventListener('keydown', enterListener);
+
+            // Audio configuration sync
+            const audioBtn = document.getElementById('btn-audio');
+            audioBtn.innerHTML = gameState.audioEnabled ? `<span>🔊</span><span class="hidden sm:inline">Sound: On</span>` : `<span>🔇</span><span class="hidden sm:inline">Sound: Off</span>`;
+            audioBtn.addEventListener('click', () => {
+                gameState.audioEnabled = !gameState.audioEnabled;
+                audioBtn.innerHTML = gameState.audioEnabled ? `<span>🔊</span><span class="hidden sm:inline">Sound: On</span>` : `<span>🔇</span><span class="hidden sm:inline">Sound: Off</span>`;
+                if (gameState.audioEnabled) initAudio();
+                triggerSave();
+            });
         };
     </script>
 </body>
